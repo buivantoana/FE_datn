@@ -28,7 +28,7 @@ import Information from "@/pages/client/cv/Information";
 import CvController from "@/pages/client/cv/CvController";
 import MyWalletController from "@/pages/client/my_wallet/MyWalletController";
 import WalletController from "@/pages/admin/wallet/WalletController";
-import CoursesClient from "@/pages/client/courses/CoursesController"
+import CoursesClient from "@/pages/client/courses/CoursesController";
 import { useCoursesContext } from "@/App";
 import CommentControllerAdmin from "@/pages/admin/comment/CommentController";
 import ContactController from "@/pages/admin/contact/ContactController";
@@ -36,11 +36,10 @@ import DashboardController from "@/pages/admin/dashboard/DashboardController";
 import PrivateRouterAdmin from "@/components/PrivateRouterAdmin";
 import VouchersController from "@/pages/admin/vouchers/VouchersController";
 import UserVouchersController from "@/pages/admin/user_vouchers/UserVouchersController";
+import MyCoursesController from "@/pages/client/my_courses/MyCoursesController";
 const Router = () => {
-  
   const context: any = useCoursesContext();
- 
-  
+
   return (
     <BrowserRouter>
       <Routes>
@@ -54,18 +53,65 @@ const Router = () => {
           <Route path='article' element={<FeaturedArticleController />} />
           <Route path='posts' element={<WiteBlogPostController />} />
           <Route path='courses' element={<CoursesClient />} />
-          <Route path='profile' element={<PrivateRouter user={context.state.user}><ProfileController /></PrivateRouter>} />
-          <Route path='my_article' element={<PrivateRouter user={context.state.user}><MyArticleController /></PrivateRouter>} />
-          <Route path='setting' element={<PrivateRouter user={context.state.user}><SettingProfileController /></PrivateRouter>} />
-          <Route path='my_wallet' element={<PrivateRouter user={context.state.user}><MyWalletController /></PrivateRouter>} />
-        <Route path='/detail_blog/:id' element={<DetailBlogController />} />
-        <Route path='/cv' element={<CvController />} />
-      
-        
+          <Route
+            path='profile'
+            element={
+              <PrivateRouter user={context.state.user}>
+                <ProfileController />
+              </PrivateRouter>
+            }
+          />
+          <Route
+            path='my_article'
+            element={
+              <PrivateRouter user={context.state.user}>
+                <MyArticleController />
+              </PrivateRouter>
+            }
+          />
+          <Route
+            path='setting'
+            element={
+              <PrivateRouter user={context.state.user}>
+                <SettingProfileController />
+              </PrivateRouter>
+            }
+          />
+          <Route
+            path='my_wallet'
+            element={
+              <PrivateRouter user={context.state.user}>
+                <MyWalletController />
+              </PrivateRouter>
+            }
+          />
+          <Route
+            path='my_courses'
+            element={
+              <PrivateRouter user={context.state.user}>
+                <MyCoursesController />
+              </PrivateRouter>
+            }
+          />
+          <Route path='/detail_blog/:id' element={<DetailBlogController />} />
+          <Route path='/cv' element={<CvController />} />
         </Route>
-        <Route path='/learning/:id' element={<PrivateRouter user={context.state.user}><LearningController /></PrivateRouter>} />
-        <Route path='/dashboard' element={<PrivateRouterAdmin ><LayoutAdmin /></PrivateRouterAdmin>}>
-        <Route path='' element={<DashboardController />} />
+        <Route
+          path='/learning/:id'
+          element={
+            <PrivateRouter user={context.state.user}>
+              <LearningController />
+            </PrivateRouter>
+          }
+        />
+        <Route
+          path='/dashboard'
+          element={
+            <PrivateRouterAdmin>
+              <LayoutAdmin />
+            </PrivateRouterAdmin>
+          }>
+          <Route path='' element={<DashboardController />} />
           <Route path='courses' element={<CoursesController />} />
           <Route path='lesson' element={<LessonController />} />
           <Route path='sublesson' element={<SubLessonController />} />
@@ -75,7 +121,10 @@ const Router = () => {
           <Route path='post' element={<PostController />} />
           <Route path='role' element={<RoleController />} />
           <Route path='permission' element={<PermissionController />} />
-          <Route path='role_permission' element={<RolePermissionController />} />
+          <Route
+            path='role_permission'
+            element={<RolePermissionController />}
+          />
           <Route path='user' element={<UserController />} />
           <Route path='wallet' element={<WalletController />} />
           <Route path='comment' element={<CommentControllerAdmin />} />

@@ -399,9 +399,7 @@ const LearningController = () => {
                 arr[0].lesson_progress[index + 1].sub_lesson[0].sub_lesson_id
               );
               setDataLesson(courses.lesson[index + 1].sub_lesson[0]);
-              if (courses.lesson[index + 1].sub_lesson[0].type == "blog") {
-                setDone(false);
-              }
+              setDone(false);
             } else {
               setActiveLesson(
                 arr[0].lesson_progress[index].sub_lesson[index2 + 1]
@@ -411,9 +409,7 @@ const LearningController = () => {
               arr[0].lesson_progress[index].sub_lesson[
                 index2 + 1
               ].result = true;
-              if (courses.lesson[index].sub_lesson[index2 + 1].type == "blog") {
-                setDone(false);
-              }
+              setDone(false);
               arr[0].lesson_progress[index].sub_lesson[index2].completed = true;
               if (courses.lesson[index].sub_lesson[index2 + 1].type == "code") {
                 if (

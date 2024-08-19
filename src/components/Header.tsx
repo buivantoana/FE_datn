@@ -55,10 +55,14 @@ import { io } from "socket.io-client";
 import { debounce } from "lodash";
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [anchorElNotify, setAnchorElNotify] =
-    useState<HTMLButtonElement | null>(null);
-  const [anchorElProfile, setAnchorElProfile] =
-    useState<HTMLButtonElement | null>(null);
+  const [
+    anchorElNotify,
+    setAnchorElNotify,
+  ] = useState<HTMLButtonElement | null>(null);
+  const [
+    anchorElProfile,
+    setAnchorElProfile,
+  ] = useState<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
   const [disableForgot, setDisableForgot] = useState(true);
   const [check, setCheck] = useState("");
@@ -133,44 +137,17 @@ const Header = () => {
       setIsTyping(false);
     }, 2000);
   };
-  const { register, reset, handleSubmit, onFinish, errors }: any =
-    useAuthMutation({
-      action: check == "login" ? "SIGNIN" : "SIGNUP",
-      onSuccess: async (data) => {
-        if (check !== "login") {
-          if (data.token && data.refeshToken) {
-            if (data.status == 0) {
-              queryClient.invalidateQueries({
-                queryKey: ["my_courses"],
-              });
-              handleClose();
-              context.dispatch({
-                type: "LOGIN",
-                payload: {
-                  ...context.state,
-                  user: [data.data[0]],
-                },
-              });
-              let res: any = await getUserProgress(data.data[0]._id);
-              context.dispatch({
-                type: "PROGRESS",
-                payload: {
-                  ...context.state,
-                  progress: res.data,
-                },
-              });
-            }
-          } else {
-            if (data.status == 1) {
-              alert(data.message);
-            } else {
-              reset();
-              setCheck("login");
-              setSelect(true);
-              setRegisterType(false);
-            }
-          }
-        } else {
+  const {
+    register,
+    reset,
+    handleSubmit,
+    onFinish,
+    errors,
+  }: any = useAuthMutation({
+    action: check == "login" ? "SIGNIN" : "SIGNUP",
+    onSuccess: async (data) => {
+      if (check !== "login") {
+        if (data.token && data.refeshToken) {
           if (data.status == 0) {
             queryClient.invalidateQueries({
               queryKey: ["my_courses"],
@@ -180,7 +157,7 @@ const Header = () => {
               type: "LOGIN",
               payload: {
                 ...context.state,
-                user: data.data,
+                user: [data.data[0]],
               },
             });
             let res: any = await getUserProgress(data.data[0]._id);
@@ -192,9 +169,41 @@ const Header = () => {
               },
             });
           }
+        } else {
+          if (data.status == 1) {
+            alert(data.message);
+          } else {
+            reset();
+            setCheck("login");
+            setSelect(true);
+            setRegisterType(false);
+          }
         }
-      },
-    });
+      } else {
+        if (data.status == 0) {
+          queryClient.invalidateQueries({
+            queryKey: ["my_courses"],
+          });
+          handleClose();
+          context.dispatch({
+            type: "LOGIN",
+            payload: {
+              ...context.state,
+              user: data.data,
+            },
+          });
+          let res: any = await getUserProgress(data.data[0]._id);
+          context.dispatch({
+            type: "PROGRESS",
+            payload: {
+              ...context.state,
+              progress: res.data,
+            },
+          });
+        }
+      }
+    },
+  });
   const signInWithGoogle = async () => {
     try {
       setCheck("register");
@@ -235,7 +244,7 @@ const Header = () => {
         let checkRegisterCourses = progress.data.map(
           (item: any) => item.courses_id[0]
         );
-       
+
         data = data.filter((item: any) =>
           checkRegisterCourses.includes(item._id)
         );
@@ -272,10 +281,9 @@ const Header = () => {
       type: "LOGOUT",
     });
     setAnchorElProfile(null);
-    setTimeout(()=>{
-      navigate("/")
-    },500)
-    
+    setTimeout(() => {
+      navigate("/");
+    }, 500);
   };
 
   const {} = useQuery(["notify", context.state.user[0]], {
@@ -394,13 +402,11 @@ const Header = () => {
       top={0}
       left={0}
       bgcolor={"white"}
-      borderBottom={"1px solid #dddddd"}
-    >
+      borderBottom={"1px solid #dddddd"}>
       <Stack
         direction={"row"}
         justifyContent={"space-between"}
-        alignItems={"center"}
-      >
+        alignItems={"center"}>
         <Stack direction={"row"} gap={5} alignItems={"center"}>
           <Box width={"50px"} height={"40px"}>
             <Link to={""}>
@@ -414,7 +420,7 @@ const Header = () => {
                   marginTop: "-20px",
                   marginLeft: "-10px",
                 }}
-                alt="logo"
+                alt='logo'
               />
             </Link>
           </Box>
@@ -422,7 +428,7 @@ const Header = () => {
         </Stack>
         <Box position={"relative"}>
           <TextField
-            autoComplete="off"
+            autoComplete='off'
             value={changeSearch}
             onFocus={handleFocus}
             onChange={(e) => handleChangrSearch(e.target.value)}
@@ -438,10 +444,10 @@ const Header = () => {
                 height: "40px",
               },
             }}
-            placeholder="Tìm kiếm khóa học, bài viết, video, ..."
+            placeholder='Tìm kiếm khóa học, bài viết, video, ...'
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment position='start'>
                   <RiSearchLine />
                 </InputAdornment>
               ),
@@ -460,19 +466,17 @@ const Header = () => {
                 left: 0,
                 top: 42,
                 cursor: "pointer",
-              }}
-            >
+              }}>
               <Box
                 fontSize={"15px"}
                 color={"#0000008a"}
                 display={"flex"}
                 alignItems={"center"}
-                gap={"8px"}
-              >
+                gap={"8px"}>
                 {loadingSearch ? (
                   <RiSearchLine />
                 ) : (
-                  <CircularProgress size={15} color="inherit" />
+                  <CircularProgress size={15} color='inherit' />
                 )}{" "}
                 {!loadingSearch ? (
                   "Kết quả"
@@ -493,8 +497,7 @@ const Header = () => {
                       justifyContent={"space-between"}
                       alignItems={"end"}
                       paddingBottom={"12px"}
-                      borderBottom={"1px dashed #0000008a"}
-                    >
+                      borderBottom={"1px dashed #0000008a"}>
                       <Typography color={"#333"}>Khóa học</Typography>
                       <Typography fontSize={"13px"} color={"#0000008a"}>
                         Xem thêm
@@ -511,14 +514,13 @@ const Header = () => {
                               navigate(`/courses/${item._id}`);
                             }}
                             alignItems={"center"}
-                            gap={"12px"}
-                          >
+                            gap={"12px"}>
                             <img
                               src={item.image.url}
                               width={33}
                               height={33}
                               style={{ borderRadius: "50%" }}
-                              alt=""
+                              alt=''
                             />
                             <Typography fontSize={"14px"}>
                               {item.title}
@@ -536,8 +538,7 @@ const Header = () => {
                       justifyContent={"space-between"}
                       alignItems={"end"}
                       paddingBottom={"12px"}
-                      borderBottom={"1px dashed #0000008a"}
-                    >
+                      borderBottom={"1px dashed #0000008a"}>
                       <Typography color={"#333"}>Bài viết</Typography>
                       <Typography fontSize={"13px"} color={"#0000008a"}>
                         Xem thêm
@@ -554,14 +555,13 @@ const Header = () => {
                               navigate(`/detail_blog/${item._id}`);
                             }}
                             alignItems={"center"}
-                            gap={"12px"}
-                          >
+                            gap={"12px"}>
                             <img
                               src={item.image.url}
                               width={33}
                               height={33}
                               style={{ borderRadius: "50%" }}
-                              alt=""
+                              alt=''
                             />
                             <Typography fontSize={"14px"}>
                               {item.title}
@@ -583,14 +583,12 @@ const Header = () => {
                 direction={"row"}
                 sx={{ cursor: "pointer" }}
                 gap={"30px"}
-                alignItems={"center"}
-              >
+                alignItems={"center"}>
                 <Box>
                   <Typography
                     aria-describedby={id}
                     onClick={handleClickCourses}
-                    fontSize={"14px"}
-                  >
+                    fontSize={"14px"}>
                     Khóa học của tôi
                   </Typography>
                   <Popover
@@ -605,38 +603,43 @@ const Header = () => {
                     transformOrigin={{
                       vertical: "top",
                       horizontal: "right",
-                    }}
-                  >
+                    }}>
                     <Box p={"15px"} width={"380px"}>
                       <Stack
                         direction={"row"}
                         justifyContent={"space-between"}
-                        alignItems={"center"}
-                      >
+                        alignItems={"center"}>
                         <Typography fontWeight={"600"}>
                           Khóa học của tôi
                         </Typography>
-                        <Typography fontSize={"13px"} color={"#ff5117"}>
+                        <Typography
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            handleCloseCourses();
+                            setTimeout(() => {
+                              navigate("/my_courses");
+                            }, 500);
+                          }}
+                          fontSize={"13px"}
+                          color={"#ff5117"}>
                           {" "}
                           Xem tất cả
                         </Typography>
                       </Stack>
                       <Stack
-                        className="see-more"
+                        className='see-more'
                         mt={"20px"}
                         direction={"column"}
                         gap={"14px"}
                         maxHeight={"400px"}
-                        sx={{ overflowY: "scroll" }}
-                      >
+                        sx={{ overflowY: "scroll" }}>
                         {loadingCourses && (
                           <Box
                             height={40}
                             width={"100%"}
                             display={"flex"}
                             justifyContent={"center"}
-                            alignItems={"center"}
-                          >
+                            alignItems={"center"}>
                             <CircularProgress size={"20px"} />
                           </Box>
                         )}
@@ -663,22 +666,20 @@ const Header = () => {
                                             backgroundColor: "#dddddd",
                                           },
                                         }}
-                                        gap={"20px"}
-                                      >
+                                        gap={"20px"}>
                                         <Box>
                                           <img
                                             src={item.image.url}
                                             width={120}
                                             height={67}
                                             style={{ borderRadius: "6px" }}
-                                            alt=""
+                                            alt=''
                                           />
                                         </Box>
                                         <Box>
                                           <Typography
                                             fontSize={"14px"}
-                                            fontWeight={"bold"}
-                                          >
+                                            fontWeight={"bold"}>
                                             {item.title}
                                           </Typography>
 
@@ -700,23 +701,20 @@ const Header = () => {
                 <Box
                   onClick={() => {
                     navigate("/my_wallet");
-                  }}
-                >
+                  }}>
                   <RiWalletLine size={22} />
                 </Box>
                 <Box>
                   <Typography
                     aria-describedby={idNotify}
-                    onClick={handleClickNotify}
-                  >
+                    onClick={handleClickNotify}>
                     <Badge
                       badgeContent={
                         dataNotify &&
                         dataNotify.filter((item: any) => item.read == false)
                           .length
                       }
-                      color="primary"
-                    >
+                      color='primary'>
                       <NotificationsIcon />
                     </Badge>
                   </Typography>
@@ -732,14 +730,12 @@ const Header = () => {
                     transformOrigin={{
                       vertical: "top",
                       horizontal: "right",
-                    }}
-                  >
+                    }}>
                     <Box p={"15px"} width={"450px"}>
                       <Stack
                         direction={"row"}
                         justifyContent={"space-between"}
-                        alignItems={"center"}
-                      >
+                        alignItems={"center"}>
                         <Typography fontWeight={"600"}>Thông báo</Typography>
                         <Typography fontSize={"13px"} color={"#ff5117"}>
                           {" "}
@@ -747,13 +743,12 @@ const Header = () => {
                         </Typography>
                       </Stack>
                       <Stack
-                        className="see-more"
+                        className='see-more'
                         mt={"20px"}
                         direction={"column"}
                         gap={"14px"}
                         maxHeight={"400px"}
-                        sx={{ overflowY: "scroll" }}
-                      >
+                        sx={{ overflowY: "scroll" }}>
                         {dataNotify &&
                           dataNotify.length &&
                           dataNotify.map((item: any) => {
@@ -769,27 +764,23 @@ const Header = () => {
                                 borderBottom={"1px dashed #dddddd"}
                                 p={"5px"}
                                 borderRadius={"5px"}
-                                gap={"15px"}
-                              >
+                                gap={"15px"}>
                                 <Box p={"5px"}>
                                   <Badge
-                                    color="secondary"
+                                    color='secondary'
                                     invisible={item.read}
-                                    variant="dot"
-                                  >
+                                    variant='dot'>
                                     <Box>
                                       <Typography
                                         fontWeight={"bold"}
-                                        sx={{ width: "100%" }}
-                                      >
+                                        sx={{ width: "100%" }}>
                                         {item.title}
                                       </Typography>
                                       <Typography
                                         mt={"5px"}
                                         fontSize={"14px"}
                                         color={"#333"}
-                                        sx={{ width: "100%" }}
-                                      >
+                                        sx={{ width: "100%" }}>
                                         {item.message}
                                       </Typography>
                                     </Box>
@@ -806,8 +797,7 @@ const Header = () => {
                 <Box>
                   <Typography
                     aria-describedby={id}
-                    onClick={handleClickProfile}
-                  >
+                    onClick={handleClickProfile}>
                     <img
                       src={
                         context.state.user[0].image.url
@@ -817,7 +807,7 @@ const Header = () => {
                       width={40}
                       height={40}
                       style={{ borderRadius: "50%" }}
-                      alt=""
+                      alt=''
                     />
                   </Typography>
                   <Popover
@@ -832,14 +822,12 @@ const Header = () => {
                     transformOrigin={{
                       vertical: "top",
                       horizontal: "right",
-                    }}
-                  >
+                    }}>
                     <Box p={"20px"} sx={{ cursor: "pointer" }} width={"200px"}>
                       <Stack
                         direction={"row"}
                         alignItems={"center"}
-                        gap={"15px"}
-                      >
+                        gap={"15px"}>
                         <Box>
                           <img
                             src={
@@ -850,7 +838,7 @@ const Header = () => {
                             width={40}
                             height={40}
                             style={{ borderRadius: "50%" }}
-                            alt=""
+                            alt=''
                           />
                         </Box>
                         <Box>
@@ -862,8 +850,7 @@ const Header = () => {
                       <Stack direction={"column"} mt={"20px"} gap={"18px"}>
                         <Box
                           borderBottom={"1px dashed #dddddd"}
-                          paddingBottom={"8px"}
-                        >
+                          paddingBottom={"8px"}>
                           <Typography
                             fontSize={"14px"}
                             color={"#333"}
@@ -873,16 +860,14 @@ const Header = () => {
                             }}
                             sx={{ display: "flex" }}
                             alignItems={"center"}
-                            gap={"8px"}
-                          >
+                            gap={"8px"}>
                             <RiAccountCircleLine size={18} /> Trang cá nhân
                           </Typography>
                         </Box>
                         {context.state.user[0].role !== "member" && (
                           <Box
                             borderBottom={"1px dashed #dddddd"}
-                            paddingBottom={"8px"}
-                          >
+                            paddingBottom={"8px"}>
                             <Typography
                               fontSize={"14px"}
                               color={"#333"}
@@ -892,16 +877,14 @@ const Header = () => {
                               }}
                               sx={{ display: "flex" }}
                               alignItems={"center"}
-                              gap={"8px"}
-                            >
+                              gap={"8px"}>
                               <RiAdminLine size={18} /> Quản trị
                             </Typography>
                           </Box>
                         )}
                         <Box
                           borderBottom={"1px dashed #dddddd"}
-                          paddingBottom={"8px"}
-                        >
+                          paddingBottom={"8px"}>
                           <Typography
                             fontSize={"14px"}
                             color={"#333"}
@@ -911,8 +894,7 @@ const Header = () => {
                             }}
                             sx={{ display: "flex" }}
                             alignItems={"center"}
-                            gap={"8px"}
-                          >
+                            gap={"8px"}>
                             <RiArticleLine size={18} /> Bài viết của tôi
                           </Typography>
                         </Box>
@@ -922,15 +904,13 @@ const Header = () => {
                             handleCloseProfile();
                             navigate("/setting");
                           }}
-                          paddingBottom={"8px"}
-                        >
+                          paddingBottom={"8px"}>
                           <Typography
                             fontSize={"14px"}
                             color={"#333"}
                             sx={{ display: "flex" }}
                             alignItems={"center"}
-                            gap={"8px"}
-                          >
+                            gap={"8px"}>
                             <RiSettings2Line size={20} /> Cài đặt
                           </Typography>
                         </Box>
@@ -941,8 +921,7 @@ const Header = () => {
                           color={"#333"}
                           sx={{ display: "flex" }}
                           alignItems={"center"}
-                          gap={"8px"}
-                        >
+                          gap={"8px"}>
                           <RiLogoutCircleRLine size={20} /> Đăng xuất
                         </Typography>
                       </Stack>
@@ -954,8 +933,7 @@ const Header = () => {
               <Stack direction={"row"} gap={2}>
                 <Button
                   onClick={() => handleCheck("login")}
-                  sx={{ color: "black" }}
-                >
+                  sx={{ color: "black" }}>
                   Đăng nhập
                 </Button>
                 <Button
@@ -967,8 +945,7 @@ const Header = () => {
                     borderRadius: "99px",
                     width: "92px",
                     height: "34px",
-                  }}
-                >
+                  }}>
                   Đăng Ký
                 </Button>
               </Stack>
@@ -977,12 +954,12 @@ const Header = () => {
         ) : (
           <>
             <Stack direction={"row"} alignItems={"center"} gap={"12px"}>
-              <Skeleton width="50px" />
-              <Skeleton width="30px" height={"30px"} />
-              <Skeleton width="30px" height={"30px"} />
+              <Skeleton width='50px' />
+              <Skeleton width='30px' height={"30px"} />
+              <Skeleton width='30px' height={"30px"} />
               <Skeleton
-                animation="wave"
-                variant="circular"
+                animation='wave'
+                variant='circular'
                 width={40}
                 height={40}
               />
@@ -994,10 +971,9 @@ const Header = () => {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={{ borderRadius: "15px" }}
-      >
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+        sx={{ borderRadius: "15px" }}>
         <Box sx={{ position: "relative", width: "540px", maxHeight: "750px" }}>
           <Box
             onClick={handleClose}
@@ -1013,8 +989,7 @@ const Header = () => {
               top: "15px",
               right: "15px",
               zIndex: 1,
-            }}
-          >
+            }}>
             <RiCloseLine size={"20px"} />
           </Box>
           {check === "login" && (
@@ -1023,13 +998,11 @@ const Header = () => {
                 textAlign: "center",
                 padding: "80px 20px 60px",
                 position: "relative",
-              }}
-            >
+              }}>
               {!select ? (
                 <Box
                   onClick={() => setSelect(!select)}
-                  sx={{ position: "absolute", top: "14%", left: "25px" }}
-                >
+                  sx={{ position: "absolute", top: "14%", left: "25px" }}>
                   <RiArrowLeftSLine size={"30px"} />
                 </Box>
               ) : (
@@ -1042,15 +1015,14 @@ const Header = () => {
                   height={100}
                   style={{ borderRadius: "10px", objectFit: "contain" }}
                   src={logo}
-                  alt=""
+                  alt=''
                 />
               </Box>
               <Typography
                 my={"10px"}
                 fontWeight={"700"}
-                variant="h5"
-                fontSize={"27px"}
-              >
+                variant='h5'
+                fontSize={"27px"}>
                 Đăng nhập tài khoản FDemy
               </Typography>
               <Typography my={"10px"} fontSize={"13px"} color={"#f33a58"}>
@@ -1062,18 +1034,16 @@ const Header = () => {
                   direction={"column"}
                   alignItems={"center"}
                   gap={"20px"}
-                  my={"20px"}
-                >
+                  my={"20px"}>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
                     width={"320px"}
                     border={"2px solid #ddd"}
                     borderRadius={"30px"}
-                    padding={"10px 0"}
-                  >
+                    padding={"10px 0"}>
                     <Box width={"15%"}>
-                      <img src={user} width={20} height={20} alt="" />
+                      <img src={user} width={20} height={20} alt='' />
                     </Box>
                     <Box onClick={() => setSelect(!select)} width={"80%"}>
                       <Typography fontSize={"13px"} fontWeight={"600"}>
@@ -1087,10 +1057,9 @@ const Header = () => {
                     width={"320px"}
                     border={"2px solid #ddd"}
                     borderRadius={"30px"}
-                    padding={"10px 0"}
-                  >
+                    padding={"10px 0"}>
                     <Box width={"15%"}>
-                      <img src={google} width={20} height={20} alt="" />
+                      <img src={google} width={20} height={20} alt='' />
                     </Box>
                     <Box width={"80%"} onClick={signInWithGoogle}>
                       <Typography fontSize={"13px"} fontWeight={"600"}>
@@ -1107,22 +1076,19 @@ const Header = () => {
                         <Stack
                           direction={"row"}
                           justifyContent={"space-between"}
-                          alignItems={"flex-end"}
-                        >
+                          alignItems={"flex-end"}>
                           <Typography
                             marginLeft={"15px"}
                             textAlign={"left"}
                             fontSize={"14px"}
-                            fontWeight={"600"}
-                          >
+                            fontWeight={"600"}>
                             {registerType ? " Số điện thoại" : "Email"}
                           </Typography>
                           <Typography
                             sx={{ position: "relative", zIndex: 10 }}
                             onClick={() => setRegisterType(!registerType)}
                             fontSize={"12px"}
-                            color={"#666"}
-                          >
+                            color={"#666"}>
                             Đăng nhập với Email
                           </Typography>
                         </Stack>
@@ -1135,19 +1101,17 @@ const Header = () => {
 
                             mt: "5px",
                             borderRadius: "30px",
-                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                              {
-                                borderRadius: "30px",
-                              },
-                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                              {
-                                height: "28px",
-                              },
+                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                              borderRadius: "30px",
+                            },
+                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                              height: "28px",
+                            },
                           }}
-                          helperText=" "
+                          helperText=' '
                           placeholder={"Email"}
-                          id="demo-helper-text-aligned-no-helper"
-                          size="small"
+                          id='demo-helper-text-aligned-no-helper'
+                          size='small'
                         />
                         <TextField
                           {...register("password")}
@@ -1157,25 +1121,23 @@ const Header = () => {
                             height: "42px",
                             mt: "10px",
                             borderRadius: "30px",
-                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                              {
-                                borderRadius: "30px",
-                              },
-                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                              {
-                                height: "28px",
-                              },
+                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                              borderRadius: "30px",
+                            },
+                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                              height: "28px",
+                            },
                           }}
-                          helperText=" "
-                          type="password"
+                          helperText=' '
+                          type='password'
                           placeholder={"Password"}
-                          id="demo-helper-text-aligned-no-helper"
-                          size="small"
+                          id='demo-helper-text-aligned-no-helper'
+                          size='small'
                         />
                       </Box>
                       <Box>
                         <Button
-                          type="submit"
+                          type='submit'
                           sx={{
                             width: "100%",
                             height: "44px",
@@ -1185,8 +1147,7 @@ const Header = () => {
                             borderRadius: "30px",
                             mt: "20px",
                             fontWeight: "700",
-                          }}
-                        >
+                          }}>
                           Đăng nhập
                         </Button>
                       </Box>
@@ -1202,8 +1163,7 @@ const Header = () => {
                     setSelect(true);
                     setRegisterType(false);
                   }}
-                  style={{ color: "#f05123" }}
-                >
+                  style={{ color: "#f05123" }}>
                   Đăng ký
                 </b>
                 <br></br>
@@ -1211,8 +1171,7 @@ const Header = () => {
                   onClick={() => {
                     setCheck("forgotpassword");
                   }}
-                  style={{ color: "#f05123" }}
-                >
+                  style={{ color: "#f05123" }}>
                   Quên mật khẩu
                 </b>
               </Typography>
@@ -1232,8 +1191,7 @@ const Header = () => {
               {!select ? (
                 <Box
                   onClick={() => setSelect(!select)}
-                  sx={{ position: "absolute", top: "14%", left: "25px" }}
-                >
+                  sx={{ position: "absolute", top: "14%", left: "25px" }}>
                   <RiArrowLeftSLine size={"30px"} />
                 </Box>
               ) : (
@@ -1245,15 +1203,14 @@ const Header = () => {
                   height={100}
                   style={{ borderRadius: "10px", objectFit: "contain" }}
                   src={logo}
-                  alt=""
+                  alt=''
                 />
               </Box>
               <Typography
                 my={"10px"}
                 fontWeight={"700"}
-                variant="h5"
-                fontSize={"27px"}
-              >
+                variant='h5'
+                fontSize={"27px"}>
                 Đăng ký tài khoản FDemy
               </Typography>
               <Typography my={"10px"} fontSize={"13px"} color={"#f33a58"}>
@@ -1265,25 +1222,22 @@ const Header = () => {
                   direction={"column"}
                   alignItems={"center"}
                   gap={"20px"}
-                  my={"20px"}
-                >
+                  my={"20px"}>
                   <Stack
                     direction={"row"}
                     alignItems={"center"}
                     width={"320px"}
                     border={"2px solid #ddd"}
                     borderRadius={"30px"}
-                    padding={"10px 0"}
-                  >
+                    padding={"10px 0"}>
                     <Box width={"15%"}>
-                      <img src={user} width={20} height={20} alt="" />
+                      <img src={user} width={20} height={20} alt='' />
                     </Box>
                     <Box width={"80%"}>
                       <Typography
                         onClick={() => setSelect(!select)}
                         fontSize={"13px"}
-                        fontWeight={"600"}
-                      >
+                        fontWeight={"600"}>
                         Sử dụng email / số điện thoại
                       </Typography>
                     </Box>
@@ -1298,8 +1252,7 @@ const Header = () => {
                           marginLeft={"15px"}
                           textAlign={"left"}
                           fontSize={"14px"}
-                          fontWeight={"600"}
-                        >
+                          fontWeight={"600"}>
                           Tên của bạn?
                         </Typography>
                         <TextField
@@ -1309,34 +1262,30 @@ const Header = () => {
                             height: "42px",
                             mt: "5px",
                             borderRadius: "30px",
-                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                              {
-                                borderRadius: "30px",
-                              },
-                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                              {
-                                height: "28px",
-                              },
+                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                              borderRadius: "30px",
+                            },
+                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                              height: "28px",
+                            },
                           }}
                           {...register("user_name")}
-                          helperText=" "
-                          placeholder="Họ và tên của bạn"
-                          id="demo-helper-text-aligned-no-helper"
-                          size="small"
+                          helperText=' '
+                          placeholder='Họ và tên của bạn'
+                          id='demo-helper-text-aligned-no-helper'
+                          size='small'
                         />
                       </Box>
                       <Box mt={"10px"}>
                         <Stack
                           direction={"row"}
                           justifyContent={"space-between"}
-                          alignItems={"flex-end"}
-                        >
+                          alignItems={"flex-end"}>
                           <Typography
                             sx={{ position: "relative", zIndex: 10 }}
                             onClick={() => setRegisterType(!registerType)}
                             fontSize={"12px"}
-                            color={"#666"}
-                          >
+                            color={"#666"}>
                             Đăng ký với Email
                           </Typography>
                         </Stack>
@@ -1349,24 +1298,22 @@ const Header = () => {
                             height: "42px",
                             mt: "5px",
                             borderRadius: "30px",
-                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                              {
-                                borderRadius: "30px",
-                              },
-                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                              {
-                                height: "28px",
-                              },
+                            ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                              borderRadius: "30px",
+                            },
+                            ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                              height: "28px",
+                            },
                           }}
-                          helperText=" "
+                          helperText=' '
                           placeholder={"Email"}
-                          id="demo-helper-text-aligned-no-helper"
-                          size="small"
+                          id='demo-helper-text-aligned-no-helper'
+                          size='small'
                         />
                       </Box>
                       <Box>
                         <Button
-                          type="submit"
+                          type='submit'
                           sx={{
                             width: "100%",
                             height: "44px",
@@ -1376,8 +1323,7 @@ const Header = () => {
                             borderRadius: "30px",
                             mt: "20px",
                             fontWeight: "700",
-                          }}
-                        >
+                          }}>
                           Đăng ký
                         </Button>
                       </Box>
@@ -1393,8 +1339,7 @@ const Header = () => {
                     setSelect(true);
                     setRegisterType(false);
                   }}
-                  style={{ color: "#f05123" }}
-                >
+                  style={{ color: "#f05123" }}>
                   Đăng nhập
                 </b>
               </Typography>
@@ -1412,8 +1357,7 @@ const Header = () => {
             <Box sx={{ textAlign: "center", padding: "80px 20px 60px" }}>
               <Box
                 onClick={() => setSelect(!select)}
-                sx={{ position: "absolute", top: "14%", left: "25px" }}
-              >
+                sx={{ position: "absolute", top: "14%", left: "25px" }}>
                 <RiArrowLeftSLine size={"30px"} />
               </Box>
 
@@ -1423,15 +1367,14 @@ const Header = () => {
                   height={100}
                   style={{ borderRadius: "10px", objectFit: "contain" }}
                   src={logo}
-                  alt=""
+                  alt=''
                 />
               </Box>
               <Typography
                 my={"10px"}
                 fontWeight={"700"}
-                variant="h5"
-                fontSize={"27px"}
-              >
+                variant='h5'
+                fontSize={"27px"}>
                 Lấy lại mật khẩu
               </Typography>
               <Typography my={"10px"} fontSize={"13px"} color={"#f33a58"}>
@@ -1451,19 +1394,17 @@ const Header = () => {
                           height: "42px",
                           mt: "5px",
                           borderRadius: "30px",
-                          ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                            {
-                              borderRadius: "30px",
-                            },
-                          ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                            {
-                              height: "28px",
-                            },
+                          ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                            borderRadius: "30px",
+                          },
+                          ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            height: "28px",
+                          },
                         }}
-                        helperText=" "
+                        helperText=' '
                         placeholder={"Email"}
-                        id="demo-helper-text-aligned-no-helper"
-                        size="small"
+                        id='demo-helper-text-aligned-no-helper'
+                        size='small'
                       />
                     </Box>
                     <Box
@@ -1476,8 +1417,7 @@ const Header = () => {
                         ".css-1e6y48t-MuiButtonBase-root-MuiButton-root": {
                           width: "115px",
                         },
-                      }}
-                    >
+                      }}>
                       <TextField
                         disabled={disableForgot}
                         value={otp}
@@ -1487,20 +1427,18 @@ const Header = () => {
                           height: "42px",
                           mt: "5px",
                           borderRadius: "30px",
-                          ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                            {
-                              borderRadius: "30px",
-                              paddingRight: "4px",
-                            },
-                          ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                            {
-                              height: "28px",
-                            },
+                          ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                            borderRadius: "30px",
+                            paddingRight: "4px",
+                          },
+                          ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                            height: "28px",
+                          },
                         }}
-                        helperText=" "
+                        helperText=' '
                         placeholder={"Nhập mã OTP"}
-                        id="demo-helper-text-aligned-no-helper"
-                        size="small"
+                        id='demo-helper-text-aligned-no-helper'
+                        size='small'
                         InputProps={{
                           endAdornment: (
                             <>
@@ -1515,8 +1453,7 @@ const Header = () => {
                                     borderRadius: "99px",
                                     width: "92px",
                                     height: "38px",
-                                  }}
-                                >
+                                  }}>
                                   Gửi mã
                                 </Button>
                               ) : (
@@ -1530,8 +1467,7 @@ const Header = () => {
                                     borderRadius: "99px",
                                     width: "200px",
                                     height: "38px",
-                                  }}
-                                >
+                                  }}>
                                   Kiểm tra mã
                                 </Button>
                               )}
@@ -1545,7 +1481,7 @@ const Header = () => {
                       <>
                         <Box mt={"10px"}>
                           <TextField
-                            type="password"
+                            type='password'
                             value={passwordNew}
                             onChange={(e: any) =>
                               setPasswordNew(e.target.value)
@@ -1555,24 +1491,22 @@ const Header = () => {
                               height: "42px",
                               mt: "5px",
                               borderRadius: "30px",
-                              ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                                {
-                                  borderRadius: "30px",
-                                },
-                              ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                                {
-                                  height: "28px",
-                                },
+                              ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                                borderRadius: "30px",
+                              },
+                              ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                                height: "28px",
+                              },
                             }}
-                            helperText=" "
+                            helperText=' '
                             placeholder={"Mật khẩu mới"}
-                            id="demo-helper-text-aligned-no-helper"
-                            size="small"
+                            id='demo-helper-text-aligned-no-helper'
+                            size='small'
                           />
                         </Box>
                         <Box mt={"10px"}>
                           <TextField
-                            type="password"
+                            type='password'
                             value={confirmPasswordNew}
                             onChange={(e: any) =>
                               setConfirmPasswordNew(e.target.value)
@@ -1582,19 +1516,17 @@ const Header = () => {
                               height: "42px",
                               mt: "5px",
                               borderRadius: "30px",
-                              ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ":
-                                {
-                                  borderRadius: "30px",
-                                },
-                              ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input":
-                                {
-                                  height: "28px",
-                                },
+                              ".css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root ": {
+                                borderRadius: "30px",
+                              },
+                              ".css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input": {
+                                height: "28px",
+                              },
                             }}
-                            helperText=" "
+                            helperText=' '
                             placeholder={"Nhập lại mật khẩu mới"}
-                            id="demo-helper-text-aligned-no-helper"
-                            size="small"
+                            id='demo-helper-text-aligned-no-helper'
+                            size='small'
                           />
                         </Box>
                       </>
@@ -1612,8 +1544,7 @@ const Header = () => {
                           borderRadius: "30px",
                           mt: "20px",
                           fontWeight: "700",
-                        }}
-                      >
+                        }}>
                         Đặt lại mật khẩu
                       </Button>
                     </Box>
@@ -1629,8 +1560,7 @@ const Header = () => {
                     setSelect(true);
                     setRegisterType(false);
                   }}
-                  style={{ color: "#f05123" }}
-                >
+                  style={{ color: "#f05123" }}>
                   Đăng nhập
                 </b>
               </Typography>
@@ -1654,17 +1584,16 @@ export default Header;
 const ProgressBar = ({ percentage }: any) => {
   return (
     <div
-      className="progress-bar-container"
+      className='progress-bar-container'
       style={{
         width: "90%",
         backgroundColor: "#f0f0f0",
         borderRadius: "4px",
         overflow: "hidden",
         marginTop: "10px",
-      }}
-    >
+      }}>
       <div
-        className="progress-bar"
+        className='progress-bar'
         style={{
           height: "9px",
           backgroundColor: "#007bff",
@@ -1674,8 +1603,7 @@ const ProgressBar = ({ percentage }: any) => {
           justifyContent: "center",
           transition: "width 0.5s ease",
           width: `${percentage}%`,
-        }}
-      ></div>
+        }}></div>
     </div>
   );
 };
