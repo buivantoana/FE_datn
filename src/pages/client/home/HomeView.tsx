@@ -255,7 +255,7 @@ const HomeView = ({
                 type='text'
                 id='formName'
                 className='form-control form-control-lg thick width'
-                placeholder='Name'
+                placeholder='Họ và tên'
               />
             </div>
 
@@ -282,7 +282,7 @@ const HomeView = ({
                 type='text'
                 id='formName'
                 className='form-control form-control-lg thick width'
-                placeholder='Subject'
+                placeholder='Tiêu đề'
               />
             </div>
             <div className='form-group message'>
@@ -292,7 +292,7 @@ const HomeView = ({
                 id='formMessage'
                 className='form-control form-control-lg width'
                 rows={7}
-                placeholder='Message'
+                placeholder='Ghi chú'
               />
             </div>
 
@@ -302,7 +302,7 @@ const HomeView = ({
                 style={{ color: "white" }}
                 className='btn btn-primary'
                 tabIndex={-1}>
-                Send message
+                Gửi
               </button>
             </div>
           </form>

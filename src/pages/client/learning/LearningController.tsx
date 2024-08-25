@@ -153,8 +153,12 @@ const LearningController = () => {
                   for (let key in JSON.parse(itemChild.type_exercise)) {
                     if (key == "html") {
                       setTypeCode("html");
-                    } else {
+                    } else if (key == "javascript") {
                       setTypeCode("javascript");
+                    } else if (key == "java") {
+                      setTypeCode("java");
+                    } else if (key == "python") {
+                      setTypeCode("python");
                     }
                   }
                 }
@@ -183,8 +187,12 @@ const LearningController = () => {
                   )) {
                     if (key == "html") {
                       setTypeCode("html");
-                    } else {
+                    } else if (key == "javascript") {
                       setTypeCode("javascript");
+                    } else if (key == "java") {
+                      setTypeCode("java");
+                    } else if (key == "python") {
+                      setTypeCode("python");
                     }
                   }
                 }

@@ -378,7 +378,7 @@ const MyWalletController = () => {
             bank: bank.bin,
             accountName: nameBank.message,
             accountNumber: stk,
-            amount: amount,
+            amount: parseInt(amount.replace(/\./g, ""), 10),
             memo: "",
           });
           setShowProgress(false);
@@ -391,14 +391,15 @@ const MyWalletController = () => {
               user_id: [user.data[0]._id],
               type: "withdraw",
               status: "pending",
-              amount: amount,
+              amount: parseInt(amount.replace(/\./g, ""), 10),
               stk: stk,
               bankAccount: bank.short,
               qr_code: response.qrCode.data.qrCode,
             });
             if (transactions?.status == 0) {
               updateWalletSuccess(
-                Number(data.data[0].balance) - Number(amount),
+                Number(data.data[0].balance) -
+                  Number(parseInt(amount.replace(/\./g, ""), 10)),
                 user.data[0]._id,
                 true
               );

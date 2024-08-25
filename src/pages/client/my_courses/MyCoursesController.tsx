@@ -4,6 +4,7 @@ import MyCoursesView from "./MyCoursesView";
 import { getCategoriesCourses } from "@/service/categories";
 import { useNavigate } from "react-router-dom";
 import { useCoursesContext } from "@/App";
+import Progress from "@/components/Process";
 
 const MyCoursesController = () => {
   const { data } = useQuery("courses_categories", {
@@ -25,6 +26,7 @@ const MyCoursesController = () => {
   };
   return (
     <>
+     
       <MyCoursesView
         data={data !== undefined ? data : []}
         checkRegisterCourses={checkRegisterCourses}

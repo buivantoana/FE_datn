@@ -1154,6 +1154,24 @@ const MyWalletView = ({
                       <li style={{ margin: "0" }}>Pending : Đang xử lý </li>
                       <li style={{ margin: "0" }}>Failed : Thất bại </li>
                     </ul>
+                    <Typography
+                      ml={"10px"}
+                      fontWeight={"bold"}
+                      fontSize={"15px"}>
+                      3.Khiếu nại
+                    </Typography>
+                    <ul
+                      style={{
+                        margin: " 0",
+                        fontSize: "14px",
+                        color: "#423a3a",
+                      }}>
+                      <li style={{ margin: "0" }}>
+                        Rút tiền : Nếu quý khách thấy trạng thái rút tiền thành
+                        công mà tài khoản chưa nhận được.Vui lòng liên hệ với hỗ
+                        trợ để được giải quyết.
+                      </li>
+                    </ul>
                   </Box>
                 </>
               )}
